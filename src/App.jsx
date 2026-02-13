@@ -918,18 +918,19 @@ export default function BoyfriendExe() {
 
         body {
           font-family: 'Plus Jakarta Sans', 'Courier New', sans-serif;
-          overflow: hidden;
+          overflow-x: hidden;
         }
 
         /* App Container */
         .app-container {
-          min-height: 100vh;
+          min-height: 100dvh;
           background: #0a0505;
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
           overflow: hidden;
+          padding: 0.75rem;
         }
 
         /* Scanlines Effect */
@@ -981,10 +982,10 @@ export default function BoyfriendExe() {
 
         /* Phone Frame */
         .phone-frame {
-          width: 100%;
+          width: min(100%, 430px);
           max-width: 430px;
-          height: 932px;
-          max-height: 95vh;
+          height: min(932px, calc(100dvh - 1.5rem));
+          max-height: 95dvh;
           background: #221011;
           border: 8px solid #18080a;
           border-radius: 3rem;
@@ -1056,7 +1057,7 @@ export default function BoyfriendExe() {
 
         .screen {
           width: 100%;
-          padding: 2rem;
+          padding: clamp(1rem, 2.8vw, 2rem);
           animation: fadeIn 0.5s ease-in;
           min-height: 100%;
           display: flex;
@@ -1072,6 +1073,7 @@ export default function BoyfriendExe() {
         .landing-screen {
           text-align: center;
           justify-content: center;
+          width: 100%;
         }
 
         .glitch-container {
@@ -1323,6 +1325,9 @@ export default function BoyfriendExe() {
           gap: 0.5rem;
           border-radius: 9999px;
           box-shadow: 0 0 20px rgba(238, 43, 52, 0.2);
+          width: 100%;
+          max-width: 100%;
+          text-wrap: balance;
         }
 
         .menu-button:hover {
@@ -1433,6 +1438,7 @@ export default function BoyfriendExe() {
           margin-top: 2rem;
           flex-wrap: wrap;
           justify-content: center;
+          width: 100%;
         }
 
         .choice-buttons-container {
@@ -1443,6 +1449,7 @@ export default function BoyfriendExe() {
           justify-content: center;
           position: relative;
           min-height: 60px;
+          width: 100%;
         }
 
         .growing-button {
@@ -1453,6 +1460,7 @@ export default function BoyfriendExe() {
         .accept-screen {
           text-align: center;
           justify-content: center;
+          width: 100%;
         }
 
         .heart-pulse {
@@ -1525,6 +1533,7 @@ export default function BoyfriendExe() {
         .processing-screen {
           text-align: center;
           justify-content: center;
+          width: 100%;
         }
 
         .spinner {
@@ -1546,6 +1555,7 @@ export default function BoyfriendExe() {
         .result-screen {
           text-align: center;
           justify-content: center;
+          width: 100%;
         }
 
         .success-title {
@@ -1594,6 +1604,7 @@ export default function BoyfriendExe() {
         .fortune-screen {
           text-align: center;
           justify-content: center;
+          width: 100%;
         }
 
         .fortune-box {
@@ -1748,6 +1759,7 @@ export default function BoyfriendExe() {
           max-width: 600px;
           margin: 0 auto;
           justify-content: center;
+          width: 100%;
         }
 
         .fade-in {
@@ -2273,6 +2285,7 @@ export default function BoyfriendExe() {
           margin-top: 2rem;
           flex-wrap: wrap;
           justify-content: center;
+          width: 100%;
         }
 
         .choice-buttons-container {
@@ -2283,6 +2296,7 @@ export default function BoyfriendExe() {
           justify-content: center;
           position: relative;
           min-height: 60px;
+          width: 100%;
         }
 
         .growing-button {
@@ -2536,13 +2550,29 @@ export default function BoyfriendExe() {
           }
         }
 
+        @media (max-width: 1024px) {
+          .phone-frame {
+            width: min(100%, 520px);
+            max-width: 520px;
+          }
+
+          .status-bar {
+            padding: 0.85rem 1.25rem 0.5rem;
+          }
+        }
+
         @media (max-width: 768px) {
+          .app-container {
+            padding: 0;
+          }
+
           .phone-frame {
             border-radius: 0;
             border: none;
+            width: 100%;
             max-width: 100%;
-            height: 100vh;
-            max-height: 100vh;
+            height: 100dvh;
+            max-height: 100dvh;
           }
 
           .title {
@@ -2550,17 +2580,31 @@ export default function BoyfriendExe() {
           }
 
           .big-red-button {
-            width: 200px;
-            height: 200px;
-            font-size: 1.2rem;
+            width: min(62vw, 220px);
+            height: min(62vw, 220px);
+            font-size: clamp(1rem, 3.8vw, 1.2rem);
           }
 
           .button-grid {
             grid-template-columns: 1fr;
           }
 
+          .menu-button,
+          .choice-buttons .menu-button {
+            width: 100%;
+            font-size: 0.95rem;
+            padding: 0.85rem 1rem;
+          }
+
+          .typewriter {
+            white-space: normal;
+            border-right: none;
+            width: 100%;
+            animation: none;
+          }
+
           .final-title {
-            font-size: 1.8rem;
+            font-size: clamp(1.8rem, 7vw, 2.5rem) !important;
           }
 
           .rating-box,
@@ -2574,7 +2618,8 @@ export default function BoyfriendExe() {
             gap: 1rem;
           }
 
-          .timeline-image-placeholder {
+          .timeline-image-placeholder,
+          .timeline-image-placeholder.landscape {
             width: 100%;
             min-width: 100%;
           }
