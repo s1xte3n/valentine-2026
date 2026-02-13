@@ -757,11 +757,14 @@ export default function BoyfriendExe() {
                   };
                   
                   // Send comprehensive notification
-                  fetch('https://formspree.io/f/YOUR_FORM_ID', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(summary)
-                  });
+                  fetch(`https://api.telegram.org/bot8344163141:AAF5yspy5yIU_PX-ZmQGCcqBTDcGk-g-MUA/sendMessage`, {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({
+                       chat_id: '897994008',
+                       text: '🎉 SHE SAID YES! ❤️\n\nTime: ' + new Date().toLocaleString()
+                     })
+                   });
                   
                   setScreen('she-said-yes');
                 }}
