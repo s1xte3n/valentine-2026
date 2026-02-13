@@ -257,10 +257,10 @@ export default function BoyfriendExe() {
       <div className={`phone-frame ${shaking ? 'shake' : ''}`}>
         {/* Status Bar */}
         <div className="status-bar">
-          <span className="status-time">9:41</span>
+          <span className="status-time">11/01/2024</span>
           <div className="status-icons">
             <span className="status-dot"></span>
-            <span className="status-text">CHAOS_MODE</span>
+            <span className="status-text">Baby Love ❤️</span>
           </div>
         </div>
 
