@@ -24,7 +24,7 @@ VITE_TELEGRAM_CHAT_ID=your_chat_id_here
 
 If these values are missing, the app will skip sending and show a configuration message in the UI.
 
-If delivery fails, the app now shows Telegram's API error message (for example: bot blocked, chat not found, or invalid token).
+On the final Valentine screen, use **Send Test Notification** to verify Telegram delivery before tapping Yes/No.
 
 ## React Compiler
 
