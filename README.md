@@ -26,8 +26,6 @@ If these values are missing, the app will skip sending and show a configuration 
 
 On the final Valentine screen, use **Send Test Notification** to verify Telegram delivery before tapping Yes/No.
 
-If delivery fails, the app now shows Telegram's API error message (for example: bot blocked, chat not found, or invalid token).
-
 ## React Compiler
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).

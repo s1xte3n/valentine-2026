@@ -35,7 +35,6 @@ export default function BoyfriendExe() {
   const [forceRemoveClicks, setForceRemoveClicks] = useState(0);
   const [reactionTimeout, setReactionTimeout] = useState(null);
   const [notificationStatus, setNotificationStatus] = useState('idle');
-  const [notificationDetail, setNotificationDetail] = useState('');
   const [userChoices, setUserChoices] = useState({
     adventureChoices: [],
     wouldYouRatherAnswers: [],
@@ -280,45 +279,34 @@ export default function BoyfriendExe() {
   };
 
   const sendTelegramNotification = async (finalAnswer, isTest = false) => {
-    const token = (import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '').trim();
-    const chatId = (import.meta.env.VITE_TELEGRAM_CHAT_ID || '').trim();
+    const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 
     if (!token || !chatId) {
       setNotificationStatus('missing-config');
-      setNotificationDetail('Missing VITE_TELEGRAM_BOT_TOKEN or VITE_TELEGRAM_CHAT_ID.');
       return;
     }
 
     setNotificationStatus('sending');
-    setNotificationDetail('');
 
     try {
-      const payload = {
-        chat_id: chatId,
-        text: isTest
-          ? `Telegram test from BOYFRIEND.EXE ✅\nTime: ${new Date().toLocaleString()}`
-          : buildDecisionSummary(finalAnswer)
-      };
-
       const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: isTest ? buildDecisionSummary(`TEST: ${finalAnswer}`) : buildDecisionSummary(finalAnswer)
+        })
       });
 
-      const result = await response.json().catch(() => null);
-
-      if (!response.ok || !result?.ok) {
-        const description = result?.description || `Telegram returned ${response.status}`;
-        throw new Error(description);
+      if (!response.ok) {
+        throw new Error(`Telegram returned ${response.status}`);
       }
 
       setNotificationStatus('sent');
-      setNotificationDetail(`Delivered to chat ${chatId}.`);
     } catch (error) {
       console.error('Failed to send Telegram notification:', error);
       setNotificationStatus('failed');
-      setNotificationDetail(error.message || 'Unknown Telegram error.');
     }
   };
 
@@ -833,21 +821,15 @@ export default function BoyfriendExe() {
               Send Test Notification
             </button>
 
-            {notificationStatus === 'sent' && (
-              <p className="terminal-text" style={{ marginTop: '1rem', opacity: 0.85 }}>
-                Telegram notification sent ✅ {notificationDetail}
-              </p>
-            )}
-
             {notificationStatus === 'missing-config' && (
               <p className="terminal-text" style={{ marginTop: '1rem', opacity: 0.8 }}>
-                Telegram is not configured yet. Add VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID to your .env file. {notificationDetail}
+                Telegram is not configured yet. Add VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID to your .env file.
               </p>
             )}
 
             {notificationStatus === 'failed' && (
               <p className="terminal-text" style={{ marginTop: '1rem', opacity: 0.8 }}>
-                Telegram notification failed: {notificationDetail || 'Check your bot token/chat id and network access.'}
+                Telegram notification failed to send. Check your bot token/chat id and network access.
               </p>
             )}
           </div>
