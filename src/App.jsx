@@ -78,6 +78,17 @@ export default function BoyfriendExe() {
     }
   ];
 
+
+
+  const timelinePhotos = [
+    { src: `${import.meta.env.BASE_URL}1.jpg`, alt: 'Our first picture together', caption: 'The first one. The beginning of everything. I remember exactly how it felt.', width: 960, height: 1280 },
+    { src: `${import.meta.env.BASE_URL}2.jpg`, alt: 'Through the tough times together', caption: 'The tough times. When we chose to stay. When I learned what you meant by "my rock."', width: 2334, height: 4160 },
+    { src: `${import.meta.env.BASE_URL}3.jpg`, alt: 'Food date memory', caption: 'One of those ordinary moments. Good food. Better company. Just us.', width: 3120, height: 4160 },
+    { src: `${import.meta.env.BASE_URL}4.jpg`, alt: 'Quiet park moment together', caption: 'Sitting together. Quiet. Comfortable. The silence that felt safe.', width: 4160, height: 3120 },
+    { src: `${import.meta.env.BASE_URL}5.jpg`, alt: 'Car selfie from the end of 2025', caption: 'Car selfies. Your smile. Ending the year with you. About to start a new one together.', width: 4896, height: 6528 },
+    { src: `${import.meta.env.BASE_URL}6.jpg`, alt: 'Holding hands memory', caption: 'Your hand in mine. The last pictures of 2025. Ready for everything that comes next.', width: 3072, height: 4080 }
+  ];
+
   const adventureStory = [
     {
       text: "You see your boyfriend planning Valentine's Day. He's researching romantic gestures on Google like 'how to impress aspiring attorney girlfriend.' Do you:",
@@ -621,74 +632,21 @@ export default function BoyfriendExe() {
             </p>
 
             <div className="timeline-moments">
-              
-              {/* Picture 1 - First picture together */}
-              <div className="timeline-moment">
-                <div className="timeline-image-placeholder">
-                  <Heart size={40} color="#ee2b34" />
-                  <p className="placeholder-text">Our First Picture</p>
+              {timelinePhotos.map((photo, index) => (
+                <div className="timeline-moment" key={photo.src}>
+                  <div
+                    className="timeline-image-placeholder"
+                    style={{ aspectRatio: `${photo.width} / ${photo.height}` }}
+                  >
+                    <img src={photo.src} alt={photo.alt} className="timeline-image" loading={index < 2 ? 'eager' : 'lazy'} />
+                  </div>
+                  <div className="timeline-caption">
+                    <p className="timeline-text">{photo.caption}</p>
+                  </div>
                 </div>
-                <div className="timeline-caption">
-                  <p className="timeline-text">The first one. The beginning of everything. I remember exactly how it felt.</p>
-                </div>
-              </div>
-
-              {/* Picture 2 - Tough times */}
-              <div className="timeline-moment">
-                <div className="timeline-image-placeholder">
-                  <Heart size={40} color="#ee2b34" />
-                  <p className="placeholder-text">Through It All</p>
-                </div>
-                <div className="timeline-caption">
-                  <p className="timeline-text">The tough times. When we chose to stay. When I learned what you meant by "my rock."</p>
-                </div>
-              </div>
-
-              {/* Picture 3 - Food date */}
-              <div className="timeline-moment">
-                <div className="timeline-image-placeholder landscape">
-                  <Heart size={40} color="#ee2b34" />
-                  <p className="placeholder-text">Food Date</p>
-                </div>
-                <div className="timeline-caption">
-                  <p className="timeline-text">One of those ordinary moments. Good food. Better company. Just us.</p>
-                </div>
-              </div>
-
-              {/* Picture 4 - Park bench */}
-              <div className="timeline-moment">
-                <div className="timeline-image-placeholder landscape">
-                  <Heart size={40} color="#ee2b34" />
-                  <p className="placeholder-text">The Park</p>
-                </div>
-                <div className="timeline-caption">
-                  <p className="timeline-text">Sitting together. Quiet. Comfortable. The silence that felt safe.</p>
-                </div>
-              </div>
-
-              {/* Picture 5 - Car selfie */}
-              <div className="timeline-moment">
-                <div className="timeline-image-placeholder">
-                  <Heart size={40} color="#ee2b34" />
-                  <p className="placeholder-text">Last Days of 2025</p>
-                </div>
-                <div className="timeline-caption">
-                  <p className="timeline-text">Car selfies. Your smile. Ending the year with you. About to start a new one together.</p>
-                </div>
-              </div>
-
-              {/* Picture 6 - Holding hands */}
-              <div className="timeline-moment">
-                <div className="timeline-image-placeholder">
-                  <Heart size={40} color="#ee2b34" />
-                  <p className="placeholder-text">Holding On</p>
-                </div>
-                <div className="timeline-caption">
-                  <p className="timeline-text">Your hand in mine. The last pictures of 2025. Ready for everything that comes next.</p>
-                </div>
-              </div>
-
+              ))}
             </div>
+
 
             <p className="terminal-text" style={{ marginTop: '3rem', fontStyle: 'italic', opacity: 0.7, textAlign: 'center' }}>
               Just us. Our moments. Our story.<br/>
@@ -1671,23 +1629,15 @@ export default function BoyfriendExe() {
         }
 
         .timeline-image-placeholder {
-          min-width: 200px;
-          width: 200px;
-          height: 200px;
-          background: rgba(238, 43, 52, 0.1);
-          border: 2px dashed #ee2b34;
+          width: clamp(180px, 34vw, 280px);
+          min-width: clamp(180px, 34vw, 280px);
+          max-width: 280px;
+          border: 2px solid rgba(238, 43, 52, 0.45);
           border-radius: 1rem;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
+          overflow: hidden;
           transition: all 0.3s;
-        }
-
-        .timeline-image-placeholder.landscape {
-          width: 280px;
-          height: 200px;
+          background: #13090a;
+          flex-shrink: 0;
         }
 
         .timeline-image-placeholder:hover {
@@ -1695,20 +1645,12 @@ export default function BoyfriendExe() {
           box-shadow: 0 0 20px rgba(238, 43, 52, 0.3);
         }
 
-        .placeholder-text {
-          color: #ee2b34;
-          font-weight: 700;
-          font-size: 0.9rem;
-          text-align: center;
-          margin: 0;
-          padding: 0 1rem;
-        }
-
-        .placeholder-subtext {
-          color: #ffa502;
-          font-size: 0.75rem;
-          margin: 0;
-          font-style: italic;
+        .timeline-image {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
+          background: #13090a;
         }
 
         .timeline-caption {
@@ -2622,6 +2564,7 @@ export default function BoyfriendExe() {
           .timeline-image-placeholder.landscape {
             width: 100%;
             min-width: 100%;
+            max-width: 100%;
           }
         }
       `}</style>
