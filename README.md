@@ -7,6 +7,25 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Telegram notification setup
+
+This app now sends Telegram notifications from the final choice screen (Yes/No) when configured.
+
+1. Create a Telegram bot with [@BotFather](https://t.me/BotFather) and copy the bot token.
+2. Get your numeric chat ID (for a personal chat, message your bot first).
+3. Create a `.env` file in the project root with:
+
+```bash
+VITE_TELEGRAM_BOT_TOKEN=your_bot_token_here
+VITE_TELEGRAM_CHAT_ID=your_chat_id_here
+```
+
+4. Restart the Vite dev server after changing `.env` values.
+
+If these values are missing, the app will skip sending and show a configuration message in the UI.
+
+If delivery fails, the app now shows Telegram's API error message (for example: bot blocked, chat not found, or invalid token).
+
 ## React Compiler
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).

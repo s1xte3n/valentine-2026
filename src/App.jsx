@@ -34,6 +34,8 @@ export default function BoyfriendExe() {
   });
   const [forceRemoveClicks, setForceRemoveClicks] = useState(0);
   const [reactionTimeout, setReactionTimeout] = useState(null);
+  const [notificationStatus, setNotificationStatus] = useState('idle');
+  const [notificationDetail, setNotificationDetail] = useState('');
   const [userChoices, setUserChoices] = useState({
     adventureChoices: [],
     wouldYouRatherAnswers: [],
@@ -240,6 +242,82 @@ export default function BoyfriendExe() {
         ))}
       </div>
     );
+  };
+
+  const buildDecisionSummary = (finalAnswer) => {
+    const selectedRatings = {
+      cooking: userChoices.ratings.cooking || ratings.cooking,
+      humor: userChoices.ratings.humor || ratings.humor,
+      romantic: userChoices.ratings.romantic || ratings.romantic,
+      handsome: userChoices.ratings.handsome || ratings.handsome
+    };
+
+    const responseSummary = userChoices.wouldYouRatherAnswers.length
+      ? userChoices.wouldYouRatherAnswers.map((item, i) => `Q${i + 1}: ${item.choice}`).join('\n')
+      : 'No answers captured yet';
+
+    const completedSummary = userChoices.completedSections.length
+      ? userChoices.completedSections.join(', ')
+      : 'None';
+
+    return [
+      `Valentine response: ${finalAnswer}`,
+      `Time: ${new Date().toLocaleString()}`,
+      '',
+      'Would You Rather answers:',
+      responseSummary,
+      '',
+      'Ratings:',
+      `- Cooking: ${selectedRatings.cooking}/2`,
+      `- Humor: ${selectedRatings.humor}/4`,
+      `- Romantic: ${selectedRatings.romantic}/8`,
+      `- Handsome: ${selectedRatings.handsome}/16`,
+      '',
+      `Timeline viewed: ${userChoices.timelineViewed ? 'Yes' : 'No'}`,
+      `Force remove attempts: ${userChoices.forceRemoveAttempts}`,
+      `Completed sections: ${completedSummary}`
+    ].join('\n');
+  };
+
+  const sendTelegramNotification = async (finalAnswer) => {
+    const token = (import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '').trim();
+    const chatId = (import.meta.env.VITE_TELEGRAM_CHAT_ID || '').trim();
+
+    if (!token || !chatId) {
+      setNotificationStatus('missing-config');
+      setNotificationDetail('Missing VITE_TELEGRAM_BOT_TOKEN or VITE_TELEGRAM_CHAT_ID.');
+      return;
+    }
+
+    setNotificationStatus('sending');
+    setNotificationDetail('');
+
+    try {
+      const payload = {
+        chat_id: chatId,
+        text: buildDecisionSummary(finalAnswer)
+      };
+
+      const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || !result?.ok) {
+        const description = result?.description || `Telegram returned ${response.status}`;
+        throw new Error(description);
+      }
+
+      setNotificationStatus('sent');
+      setNotificationDetail(`Delivered to chat ${chatId}.`);
+    } catch (error) {
+      console.error('Failed to send Telegram notification:', error);
+      setNotificationStatus('failed');
+      setNotificationDetail(error.message || 'Unknown Telegram error.');
+    }
   };
 
   return (
@@ -725,47 +803,8 @@ export default function BoyfriendExe() {
             <div className="final-buttons">
               <button 
                 className="menu-button yes-button" 
-                onClick={() => {
-                  // Prepare comprehensive summary
-                  const summary = {
-                    finalAnswer: 'YES! ❤️',
-                    timestamp: new Date().toLocaleString(),
-                    
-                    // Would You Rather Choices
-                    wouldYouRatherAnswers: userChoices.wouldYouRatherAnswers.map((item, i) => 
-                      `Q${i+1}: ${item.choice}`
-                    ).join(', '),
-                    
-                    // Ratings
-                    ratings: {
-                      cooking: `${userChoices.ratings.cooking || ratings.cooking}/2 stars`,
-                      humor: `${userChoices.ratings.humor || ratings.humor}/4 stars`,
-                      romantic: `${userChoices.ratings.romantic || ratings.romantic}/8 stars`,
-                      handsome: `${userChoices.ratings.handsome || ratings.handsome}/16 stars`
-                    },
-                    
-                    // Force Remove attempts
-                    forceRemoveAttempts: `${userChoices.forceRemoveAttempts} times`,
-                    
-                    // Timeline viewed
-                    timelineViewed: userChoices.timelineViewed ? 'Yes' : 'No',
-                    
-                    // Completed sections
-                    completedSections: userChoices.completedSections.join(', '),
-                    
-                    message: '🎉 SHE SAID YES! ❤️❤️❤️'
-                  };
-                  
-                  // Send comprehensive notification
-                  fetch(`https://api.telegram.org/bot8344163141:AAF5yspy5yIU_PX-ZmQGCcqBTDcGk-g-MUA/sendMessage`, {
-                     method: 'POST',
-                     headers: { 'Content-Type': 'application/json' },
-                     body: JSON.stringify({
-                       chat_id: '897994008',
-                       text: '🎉 SHE SAID YES! ❤️\n\nTime: ' + new Date().toLocaleString()
-                     })
-                   });
-                  
+                onClick={async () => {
+                  await sendTelegramNotification('YES! ❤️');
                   setScreen('she-said-yes');
                 }}
               >
@@ -773,43 +812,26 @@ export default function BoyfriendExe() {
               </button>
               <button 
                 className="menu-button no-button" 
-                onClick={() => {
-                  // Prepare summary for NO
-                  const summary = {
-                    finalAnswer: 'No...',
-                    timestamp: new Date().toLocaleString(),
-                    
-                    wouldYouRatherAnswers: userChoices.wouldYouRatherAnswers.map((item, i) => 
-                      `Q${i+1}: ${item.choice}`
-                    ).join(', '),
-                    
-                    ratings: {
-                      cooking: `${userChoices.ratings.cooking || ratings.cooking}/2 stars`,
-                      humor: `${userChoices.ratings.humor || ratings.humor}/4 stars`,
-                      romantic: `${userChoices.ratings.romantic || ratings.romantic}/8 stars`,
-                      handsome: `${userChoices.ratings.handsome || ratings.handsome}/16 stars`
-                    },
-                    
-                    forceRemoveAttempts: `${userChoices.forceRemoveAttempts} times`,
-                    timelineViewed: userChoices.timelineViewed ? 'Yes' : 'No',
-                    completedSections: userChoices.completedSections.join(', '),
-                    
-                    message: '😢 She said no... (but there\'s a retry button!)'
-                  };
-                  
-                  // Send notification
-                  fetch('https://formspree.io/f/YOUR_FORM_ID', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(summary)
-                  });
-                  
+                onClick={async () => {
+                  await sendTelegramNotification('No...');
                   setScreen('she-said-no');
                 }}
               >
                 No
               </button>
             </div>
+
+            {notificationStatus === 'missing-config' && (
+              <p className="terminal-text" style={{ marginTop: '1rem', opacity: 0.8 }}>
+                Telegram is not configured yet. Add VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID to your .env file. {notificationDetail}
+              </p>
+            )}
+
+            {notificationStatus === 'failed' && (
+              <p className="terminal-text" style={{ marginTop: '1rem', opacity: 0.8 }}>
+                Telegram notification failed: {notificationDetail || 'Check your bot token/chat id and network access.'}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -842,6 +864,9 @@ export default function BoyfriendExe() {
               Happy Valentine's Day, my love.<br/>
               Here's to us. Naturally. Always.
             </p>
+            {notificationStatus === 'sending' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Sending Telegram notification...</p>}
+            {notificationStatus === 'missing-config' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram not configured (set VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID).</p>}
+            {notificationStatus === 'failed' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram notification failed to send.</p>}
           </div>
         </div>
       )}
@@ -860,6 +885,8 @@ export default function BoyfriendExe() {
             >
               Let me try again ❤️
             </button>
+            {notificationStatus === 'missing-config' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram not configured (set VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID).</p>}
+            {notificationStatus === 'failed' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram notification failed to send.</p>}
           </div>
         </div>
       )}
