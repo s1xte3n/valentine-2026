@@ -696,7 +696,7 @@ export default function BoyfriendExe() {
             <p className="terminal-text" style={{ fontStyle: 'italic', marginBottom: '2rem', opacity: 0.8 }}>
               We started talking sometime in 2023.<br/>
               Met on the first day of 2024.<br/>
-              Started dating on 11 and 13 January — the two dates we still joke about.
+              Started dating on… one of those January days we still joke about.
             </p>
 
             <div className="timeline-moments">
@@ -2607,5 +2607,5 @@ export default function BoyfriendExe() {
 // Timeline:
 // Started talking sometime in 2023.
 // Met on the first day of 2024.
-// Started dating on 11 and 13 January — the two dates we still joke about.
+// Started dating on… one of those January days we still joke about.
 // This Valentine's: February 14, 2026.
