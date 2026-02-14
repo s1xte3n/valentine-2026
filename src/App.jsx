@@ -2607,5 +2607,5 @@ export default function BoyfriendExe() {
 // Timeline:
 // Started talking sometime in 2023.
 // Met on the first day of 2024.
-// Started dating on 11 January and 13 January.
+// Started dating on 11 January.
 // This Valentine's: February 14, 2026.
