@@ -855,7 +855,7 @@ export default function BoyfriendExe() {
               Here's to us. Naturally. Always.
             </p>
             {notificationStatus === 'sending' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Sending Telegram notification...</p>}
-            {notificationStatus === 'sent' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram notification sent ✅</p>}
+            {notificationStatus === 'sent' && <p className="terminal-text" style={{ marginTop: '1rem' }}></p>}
             {notificationStatus === 'missing-config' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram not configured (set VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID).</p>}
             {notificationStatus === 'failed' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram notification failed to send.</p>}
           </div>
@@ -876,7 +876,7 @@ export default function BoyfriendExe() {
             >
               Let me try again ❤️
             </button>
-            {notificationStatus === 'sent' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram notification sent ✅</p>}
+            {notificationStatus === 'sent' && <p className="terminal-text" style={{ marginTop: '1rem' }}></p>}
             {notificationStatus === 'missing-config' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram not configured (set VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID).</p>}
             {notificationStatus === 'failed' && <p className="terminal-text" style={{ marginTop: '1rem' }}>Telegram notification failed to send.</p>}
           </div>
